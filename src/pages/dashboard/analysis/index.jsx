@@ -35,6 +35,8 @@ const footerStyle= {
 const App = (props) => {
 
  const [chatList, setchatList] = useState([])//存储用户以及客服的聊天
+ const [chatTitle, setchatTitle] = useState('')//每个聊天窗口的标题
+ const [isDisabled, setisDisabled] = useState(false)
  const textAreaRef = useRef(null);
     const handleKeyDown = (e) => {
       if (e.keyCode === 13 && !e.shiftKey) { // 判断按下的是否为回车键
@@ -45,6 +47,7 @@ const App = (props) => {
       }
     };
     const onSubmit=async()=>{
+      setisDisabled(true);
       const res = await fetch(
         'http://192.168.2.135:44444/stream',
         {
@@ -69,33 +72,28 @@ const App = (props) => {
 
       try {
           let curMsg = '';
-          console.log('>> stream start');
           while (true) {
               const { done, value } = await reader.read();
               if (done) {
-                  console.log('<< stream end');
                   break;
               }
-              // console.log(decoder.decode(value));
               const delta = JSON.parse(decoder.decode(value))
               curMsg += delta
-              console.log(delta);
-              console.log(curMsg);
-
-
               const resMsg = {
                   role: 'assistant',
                   value: curMsg
               }
               setchatList([...chatList, resMsg])
+              const title=chatList[0].value;
+              setchatTitle(title);
           }
-          settitle()
       } catch (error) {
           console.error('Error reading stream:', error);
       } finally {
           reader.releaseLock();
+          setisDisabled(false)
       }
-      const title=chatList[0].value;
+      
     }
     const onFinish = (values) => {
       localStorage.setItem('chatv',JSON.stringify(values))//存储用户输入的问题
@@ -112,7 +110,6 @@ const App = (props) => {
       setchatList([...chatList])
     }
     const [form] = Form.useForm();
-
     return (
         <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
             <Layout style={{ backgroundColor: "white" }}>
@@ -136,7 +133,8 @@ const App = (props) => {
                                     placeholder="Search..."
                                     autoSize={{ minRows: 1, maxRows: 5 }}
                                     onKeyDown={handleKeyDown}
-                                    ref={textAreaRef} />
+                                    ref={textAreaRef}
+                                    disabled={isDisabled} />
                          </div>
                         </Form.Item>
                       </Form>

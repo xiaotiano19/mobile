@@ -203,3 +203,21 @@
   resize: none;
   border: 1px solid #ccc;
 }
+
+.cursor{
+  content:'';
+  position: absolute;
+  width: 10px;
+  height: 16px;
+  background-color: #314659;
+  animation:toggle 0.6s infinite;
+  opacity: 0;
+  transform:translateY(3px);
+  left:calc(v-bind('pos.x')*1px);
+  top:calc(v-bind('pos.y')*1px);
+}
+@keyframes toggle{
+  30%{
+    opacity:1;
+  }
+}

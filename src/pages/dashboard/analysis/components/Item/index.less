@@ -1,8 +1,9 @@
 .userChatWrapper,.assistantChatWrapper{
-    height: 58px;
+    display: flex;
+    justify-content: center;
     list-style: none;
     font-size:16px;
-    line-height: 58px;
+    text-align: left;
 }
 .userChatWrapper{
     background-color: #fff;
@@ -12,4 +13,23 @@
     border:1px solid #ccc;
     border-left:none;
     border-right:none;
+}
+.divWrapper{
+    display: flex;
+    justify-content: right;
+    width:700px;
+    text-align: left;
+}
+
+.imgContent{
+    height: 31.2px;
+    width: 31.2px;
+}
+.leftDiv{
+    margin-top: 10px;
+    width: 35px;
+}
+.rightDiv{
+   flex-grow: 1;
+   margin:10px 0px 20px 20px;
 }
