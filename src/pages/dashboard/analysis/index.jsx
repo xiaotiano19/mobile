@@ -41,7 +41,7 @@ const App = (props) => {
  const [text, setText] = useState('');//回复文本
  const [textRef, setTextRef] = useState(null);//显示回复文本的dom对象
  const [showCursor, setshowCursor] = useState(true)
- const [pos, setpos] = useState({x:0,y:0})
+
 
     // useEffect(() => {
     //     if (textRef) {
@@ -131,81 +131,8 @@ const App = (props) => {
       chatList.push(chat);
       setchatList([...chatList])
     }
-    // const updateCursor= ()=>{
-    //     const lastText=getLastTextNode(textRef);
-    //     const textNode=document.createTextNode('\u200b');
-    //     console.log('textNode', textNode);
 
-    //     if(lastText){
-    //         lastText.parentElement.appendChild(textNode);
-    //     }else{
-    //         textRef?.appendChild(textNode);
-    //     }
-        
-    //     const range=document.createRange();
-    //     range.setStart(textNode,0);
-    //     range.setEnd(textNode,0)
-    //     const rect = range.getBoundingClientRect();
-    //     console.log(rect.left,'rect')
-    //     const domRect=textRef?.getBoundingClientRect();
-    //     console.log(domRect)
-    //     pos.x=rect?.left-domRect.left;
-    //     pos.y=rect?.top-domRect.top;
-    //     // setTimeout(() => {
-           
-    //     // }, 0);
-     
-    //     setpos(...pos)
-    //     textNode.remove();
-    //         // rest of the code that uses `rect`
 
-    // }
-    const updateCursor= ()=>{
-        const lastText=getLastTextNode(textRef);
-        const textNode=document.createTextNode('\u200b');
-        console.log('textNode', textNode);
-    
-        if(lastText){
-            lastText.parentElement.appendChild(textNode);
-        }else{
-            textRef?.appendChild(textNode);
-        }
-    
-        const range=document.createRange();
-        range.setStart(textNode,0);
-        range.setEnd(textNode,0);
-    
-        setTimeout(() => {
-            const rect = range.getBoundingClientRect();
-            console.log(rect.left,'rect')
-            const domRect=textRef?.getBoundingClientRect();
-            console.log(domRect)
-            pos.x=rect?.left-domRect.left;
-            pos.y=rect?.top-domRect.top;
-            setpos(...pos)
-        }, 500);
-    
-        textNode.remove();
-    }
-    useEffect(() => {
-        updateCursor();
-    })
-    const getLastTextNode=(dom)=>{
-        const children=dom?.childNodes;
-        for(let i=children?.length-1;i>=0;i--){
-            const node=children[i];
-            if(node.nodeType===Node.TEXT_NODE){
-                // node.nodeValue=node.nodeValule?.replace(/\s+$/,'');
-                return node;
-            }else if(node.nodeType===Node.ELEMENT_NODE){
-                const last=getLastTextNode(node);
-                if(last){
-                    return last;
-                }
-            }
-        }
-        return null;
-    }
     const [form] = Form.useForm();
     return (
         <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
@@ -216,8 +143,9 @@ const App = (props) => {
                   {
                   chatList?.map((chat,index)=>{
                       return <Item key={index} chat={chat} setText={setText} 
+                      text={text}
                       handleTextRef={handleTextRef} 
-                      showCursor={showCursor} pos={pos}/> 
+                      showCursor={showCursor}/> 
                   })
                   }
                 </Content>
